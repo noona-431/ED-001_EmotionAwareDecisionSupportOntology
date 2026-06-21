@@ -1,0 +1,942 @@
+<?xml version="1.0"?>
+<rdf:RDF xmlns="http://www.semanticweb.org/ed001/ontology#"
+     xml:base="http://www.semanticweb.org/ed001/ontology"
+     xmlns:owl="http://www.w3.org/2002/07/owl#"
+     xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+     xmlns:xml="http://www.w3.org/XML/1998/namespace"
+     xmlns:xsd="http://www.w3.org/2001/XMLSchema#"
+     xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
+     xmlns:swrl="http://www.w3.org/2003/11/swrl#"
+     xmlns:swrlb="http://www.w3.org/2003/11/swrlb#"
+     xmlns:bfo="http://purl.obolibrary.org/obo/BFO_"
+     xmlns:dolce="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#"
+     xmlns:efo="http://www.semanticweb.org/emotion-frame-ontology#"
+     xmlns:mfoem="http://purl.obolibrary.org/obo/MFOEM_"
+     xmlns:cogat="http://www.cognitiveatlas.org/ontology#"
+     xmlns:lom="http://ltsc.ieee.org/xsd/LOM#">
+    <owl:Ontology rdf:about="http://www.semanticweb.org/ed001/ontology">
+        <owl:versionIRI rdf:resource="http://www.semanticweb.org/ed001/ontology/1.0"/>
+        <rdfs:comment xml:lang="en">ED-001: Emotion-Aware Decision Support Ontology for Modeling Human Decision-Making in Critical Learning Situations. A formal OWL ontology implementing the causal chain: Learning Context → Emotion → Cognitive State → Decision Strategy → Learning Outcome. Designed for integration with machine learning emotion classifiers and SWRL reasoning for adaptive educational support.</rdfs:comment>
+        <rdfs:label xml:lang="en">ED-001 Emotion-Aware Decision Support Ontology</rdfs:label>
+        <owl:versionInfo>1.0</owl:versionInfo>
+        <rdfs:seeAlso>http://purl.obolibrary.org/obo/BFO</rdfs:seeAlso>
+        <rdfs:seeAlso>http://www.ontologydesignpatterns.org/ont/dul/DUL.owl</rdfs:seeAlso>
+        <rdfs:seeAlso>http://www.cognitiveatlas.org/ontology</rdfs:seeAlso>
+    </owl:Ontology>
+    
+
+    <!-- 
+    ///////////////////////////////////////////////////////////////////////////////////////
+    //
+    // Annotation properties
+    //
+    ///////////////////////////////////////////////////////////////////////////////////////
+     -->
+
+    <owl:AnnotationProperty rdf:about="http://www.semanticweb.org/ed001/ontology#theoreticalGrounding">
+        <rdfs:comment>References the psychological or cognitive theory that grounds this class or property</rdfs:comment>
+        <rdfs:label>theoretical grounding</rdfs:label>
+    </owl:AnnotationProperty>
+
+    <owl:AnnotationProperty rdf:about="http://www.semanticweb.org/ed001/ontology#causality">
+        <rdfs:comment>Indicates the causal role of this class in the emotion-cognition-decision chain</rdfs:comment>
+        <rdfs:label>causality</rdfs:label>
+    </owl:AnnotationProperty>
+
+    <owl:AnnotationProperty rdf:about="http://www.semanticweb.org/ed001/ontology#mlIntegration">
+        <rdfs:comment>Describes how this class interfaces with machine learning classification outputs</rdfs:comment>
+        <rdfs:label>ML integration</rdfs:label>
+    </owl:AnnotationProperty>
+
+
+    <!-- 
+    ///////////////////////////////////////////////////////////////////////////////////////
+    //
+    // Object Properties
+    //
+    ///////////////////////////////////////////////////////////////////////////////////////
+     -->
+
+    <!-- Core Causal Chain Properties -->
+
+    <owl:ObjectProperty rdf:about="http://www.semanticweb.org/ed001/ontology#elicitedBy">
+        <rdfs:domain rdf:resource="http://www.semanticweb.org/ed001/ontology#EmotionalState"/>
+        <rdfs:range rdf:resource="http://www.semanticweb.org/ed001/ontology#LearningContext"/>
+        <rdfs:comment>Links an emotional state to the learning context that triggered it. First link in the causal chain.</rdfs:comment>
+        <rdfs:label>elicited by</rdfs:label>
+        <theoreticalGrounding>Control-Value Theory (Pekrun, 2006): Emotions arise from cognitive appraisals of control and value in achievement situations.</theoreticalGrounding>
+    </owl:ObjectProperty>
+
+    <owl:ObjectProperty rdf:about="http://www.semanticweb.org/ed001/ontology#modulates">
+        <rdfs:domain rdf:resource="http://www.semanticweb.org/ed001/ontology#EmotionalState"/>
+        <rdfs:range rdf:resource="http://www.semanticweb.org/ed001/ontology#CognitiveState"/>
+        <rdfs:comment>Links an emotional state to the cognitive processes it regulates (attention, working memory, cognitive load). Second link in the causal chain.</rdfs:comment>
+        <rdfs:label>modulates</rdfs:label>
+        <theoreticalGrounding>Cognitive Load Theory and Emotion: Negative activating emotions increase extraneous cognitive load and narrow attention focus.</theoreticalGrounding>
+    </owl:ObjectProperty>
+
+    <owl:ObjectProperty rdf:about="http://www.semanticweb.org/ed001/ontology#influencesDecision">
+        <rdfs:domain rdf:resource="http://www.semanticweb.org/ed001/ontology#CognitiveState"/>
+        <rdfs:range rdf:resource="http://www.semanticweb.org/ed001/ontology#DecisionStrategy"/>
+        <rdfs:comment>Links cognitive state to the decision-making strategy employed by the learner. Third link in the causal chain.</rdfs:comment>
+        <rdfs:label>influences decision</rdfs:label>
+        <theoreticalGrounding>Dual Process Theory: High cognitive load shifts reasoning from System 2 (deliberative) to System 1 (heuristic/impulsive).</theoreticalGrounding>
+    </owl:ObjectProperty>
+
+    <owl:ObjectProperty rdf:about="http://www.semanticweb.org/ed001/ontology#producesOutcome">
+        <rdfs:domain rdf:resource="http://www.semanticweb.org/ed001/ontology#DecisionStrategy"/>
+        <rdfs:range rdf:resource="http://www.semanticweb.org/ed001/ontology#LearningOutcome"/>
+        <rdfs:comment>Links decision strategy to the resulting learning outcome. Fourth and final link in the causal chain.</rdfs:comment>
+        <rdfs:label>produces outcome</rdfs:label>
+    </owl:ObjectProperty>
+
+    <!-- Learner-Context Properties -->
+
+    <owl:ObjectProperty rdf:about="http://www.semanticweb.org/ed001/ontology#isAttempting">
+        <rdfs:domain rdf:resource="http://www.semanticweb.org/ed001/ontology#Learner"/>
+        <rdfs:range rdf:resource="http://www.semanticweb.org/ed001/ontology#LearningTask"/>
+        <rdfs:comment>Links a learner to the task they are currently attempting</rdfs:comment>
+        <rdfs:label>is attempting</rdfs:label>
+    </owl:ObjectProperty>
+
+    <owl:ObjectProperty rdf:about="http://www.semanticweb.org/ed001/ontology#hasEmotion">
+        <rdfs:domain rdf:resource="http://www.semanticweb.org/ed001/ontology#Learner"/>
+        <rdfs:range rdf:resource="http://www.semanticweb.org/ed001/ontology#EmotionalState"/>
+        <rdfs:comment>Links a learner to their current emotional state</rdfs:comment>
+        <rdfs:label>has emotion</rdfs:label>
+        <mlIntegration>This property is asserted by the ML emotion classifier based on behavioral signals</mlIntegration>
+    </owl:ObjectProperty>
+
+    <owl:ObjectProperty rdf:about="http://www.semanticweb.org/ed001/ontology#hasCognitiveState">
+        <rdfs:domain rdf:resource="http://www.semanticweb.org/ed001/ontology#Learner"/>
+        <rdfs:range rdf:resource="http://www.semanticweb.org/ed001/ontology#CognitiveState"/>
+        <rdfs:comment>Links a learner to their current cognitive state</rdfs:comment>
+        <rdfs:label>has cognitive state</rdfs:label>
+    </owl:ObjectProperty>
+
+    <owl:ObjectProperty rdf:about="http://www.semanticweb.org/ed001/ontology#hasDecisionStrategy">
+        <rdfs:domain rdf:resource="http://www.semanticweb.org/ed001/ontology#Learner"/>
+        <rdfs:range rdf:resource="http://www.semanticweb.org/ed001/ontology#DecisionStrategy"/>
+        <rdfs:comment>Links a learner to their active decision-making strategy</rdfs:comment>
+        <rdfs:label>has decision strategy</rdfs:label>
+    </owl:ObjectProperty>
+
+    <owl:ObjectProperty rdf:about="http://www.semanticweb.org/ed001/ontology#experiencedOutcome">
+        <rdfs:domain rdf:resource="http://www.semanticweb.org/ed001/ontology#Learner"/>
+        <rdfs:range rdf:resource="http://www.semanticweb.org/ed001/ontology#LearningOutcome"/>
+        <rdfs:comment>Links a learner to the outcome of their learning attempt</rdfs:comment>
+        <rdfs:label>experienced outcome</rdfs:label>
+    </owl:ObjectProperty>
+
+    <owl:ObjectProperty rdf:about="http://www.semanticweb.org/ed001/ontology#receivesRecommendation">
+        <rdfs:domain rdf:resource="http://www.semanticweb.org/ed001/ontology#Learner"/>
+        <rdfs:range rdf:resource="http://www.semanticweb.org/ed001/ontology#AdaptiveRecommendation"/>
+        <rdfs:comment>Links a learner to adaptive recommendations generated by the reasoning system</rdfs:comment>
+        <rdfs:label>receives recommendation</rdfs:label>
+    </owl:ObjectProperty>
+
+    <!-- Task Context Properties -->
+
+    <owl:ObjectProperty rdf:about="http://www.semanticweb.org/ed001/ontology#hasContext">
+        <rdfs:domain rdf:resource="http://www.semanticweb.org/ed001/ontology#LearningTask"/>
+        <rdfs:range rdf:resource="http://www.semanticweb.org/ed001/ontology#LearningContext"/>
+        <rdfs:comment>Links a learning task to its contextual parameters</rdfs:comment>
+        <rdfs:label>has context</rdfs:label>
+    </owl:ObjectProperty>
+
+    <!-- Risk Assessment Properties -->
+
+    <owl:ObjectProperty rdf:about="http://www.semanticweb.org/ed001/ontology#hasRisk">
+        <rdfs:domain rdf:resource="http://www.semanticweb.org/ed001/ontology#Learner"/>
+        <rdfs:range rdf:resource="http://www.semanticweb.org/ed001/ontology#RiskLevel"/>
+        <rdfs:comment>Links a learner to their assessed decision risk level</rdfs:comment>
+        <rdfs:label>has risk</rdfs:label>
+    </owl:ObjectProperty>
+
+    <!-- External Ontology Alignments -->
+
+    <owl:ObjectProperty rdf:about="http://www.semanticweb.org/ed001/ontology#alignedToBFO">
+        <rdfs:comment>Aligns ED-001 classes to Basic Formal Ontology (BFO) upper-level classes</rdfs:comment>
+        <rdfs:label>aligned to BFO</rdfs:label>
+    </owl:ObjectProperty>
+
+    <owl:ObjectProperty rdf:about="http://www.semanticweb.org/ed001/ontology#alignedToDOLCE">
+        <rdfs:comment>Aligns ED-001 classes to DOLCE upper-level ontology classes</rdfs:comment>
+        <rdfs:label>aligned to DOLCE</rdfs:label>
+    </owl:ObjectProperty>
+
+
+    <!-- 
+    ///////////////////////////////////////////////////////////////////////////////////////
+    //
+    // Data Properties
+    //
+    ///////////////////////////////////////////////////////////////////////////////////////
+     -->
+
+    <!-- Learning Context Data Properties -->
+
+    <owl:DatatypeProperty rdf:about="http://www.semanticweb.org/ed001/ontology#taskDifficulty">
+        <rdfs:domain rdf:resource="http://www.semanticweb.org/ed001/ontology#LearningContext"/>
+        <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+        <rdfs:comment>Perceived difficulty level of the task (Low, Medium, High)</rdfs:comment>
+        <rdfs:label>task difficulty</rdfs:label>
+    </owl:DatatypeProperty>
+
+    <owl:DatatypeProperty rdf:about="http://www.semanticweb.org/ed001/ontology#timePressure">
+        <rdfs:domain rdf:resource="http://www.semanticweb.org/ed001/ontology#LearningContext"/>
+        <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#boolean"/>
+        <rdfs:comment>Whether the task has significant time constraints</rdfs:comment>
+        <rdfs:label>time pressure</rdfs:label>
+    </owl:DatatypeProperty>
+
+    <owl:DatatypeProperty rdf:about="http://www.semanticweb.org/ed001/ontology#feedbackType">
+        <rdfs:domain rdf:resource="http://www.semanticweb.org/ed001/ontology#LearningContext"/>
+        <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+        <rdfs:comment>Type of feedback provided (Immediate, Delayed, None)</rdfs:comment>
+        <rdfs:label>feedback type</rdfs:label>
+    </owl:DatatypeProperty>
+
+    <owl:DatatypeProperty rdf:about="http://www.semanticweb.org/ed001/ontology#stakesLevel">
+        <rdfs:domain rdf:resource="http://www.semanticweb.org/ed001/ontology#LearningContext"/>
+        <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+        <rdfs:comment>Importance of task outcome (Low, Medium, High)</rdfs:comment>
+        <rdfs:label>stakes level</rdfs:label>
+    </owl:DatatypeProperty>
+
+    <!-- Emotional State Data Properties -->
+
+    <owl:DatatypeProperty rdf:about="http://www.semanticweb.org/ed001/ontology#valence">
+        <rdfs:domain rdf:resource="http://www.semanticweb.org/ed001/ontology#EmotionalState"/>
+        <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+        <rdfs:comment>Emotional valence dimension (Positive, Negative)</rdfs:comment>
+        <rdfs:label>valence</rdfs:label>
+        <theoreticalGrounding>Dimensional model of emotions from MFOEM and Control-Value Theory</theoreticalGrounding>
+    </owl:DatatypeProperty>
+
+    <owl:DatatypeProperty rdf:about="http://www.semanticweb.org/ed001/ontology#activation">
+        <rdfs:domain rdf:resource="http://www.semanticweb.org/ed001/ontology#EmotionalState"/>
+        <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+        <rdfs:comment>Emotional activation level (Activating, Deactivating)</rdfs:comment>
+        <rdfs:label>activation</rdfs:label>
+        <theoreticalGrounding>Control-Value Theory achievement emotion taxonomy</theoreticalGrounding>
+    </owl:DatatypeProperty>
+
+    <owl:DatatypeProperty rdf:about="http://www.semanticweb.org/ed001/ontology#objectFocus">
+        <rdfs:domain rdf:resource="http://www.semanticweb.org/ed001/ontology#EmotionalState"/>
+        <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+        <rdfs:comment>Focus of emotional object (Activity, Outcome)</rdfs:comment>
+        <rdfs:label>object focus</rdfs:label>
+    </owl:DatatypeProperty>
+
+    <owl:DatatypeProperty rdf:about="http://www.semanticweb.org/ed001/ontology#intensity">
+        <rdfs:domain rdf:resource="http://www.semanticweb.org/ed001/ontology#EmotionalState"/>
+        <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#float"/>
+        <rdfs:comment>Intensity of emotional state (0.0 to 1.0)</rdfs:comment>
+        <rdfs:label>intensity</rdfs:label>
+        <mlIntegration>Derived from ML classifier probability score</mlIntegration>
+    </owl:DatatypeProperty>
+
+    <!-- Cognitive State Data Properties -->
+
+    <owl:DatatypeProperty rdf:about="http://www.semanticweb.org/ed001/ontology#cognitiveLoadLevel">
+        <rdfs:domain rdf:resource="http://www.semanticweb.org/ed001/ontology#CognitiveState"/>
+        <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+        <rdfs:comment>Level of cognitive load (Low, Medium, High)</rdfs:comment>
+        <rdfs:label>cognitive load level</rdfs:label>
+    </owl:DatatypeProperty>
+
+    <owl:DatatypeProperty rdf:about="http://www.semanticweb.org/ed001/ontology#attentionLevel">
+        <rdfs:domain rdf:resource="http://www.semanticweb.org/ed001/ontology#CognitiveState"/>
+        <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+        <rdfs:comment>Quality of attentional focus (Focused, Distributed, Narrowed)</rdfs:comment>
+        <rdfs:label>attention level</rdfs:label>
+    </owl:DatatypeProperty>
+
+    <owl:DatatypeProperty rdf:about="http://www.semanticweb.org/ed001/ontology#workingMemoryCapacity">
+        <rdfs:domain rdf:resource="http://www.semanticweb.org/ed001/ontology#CognitiveState"/>
+        <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+        <rdfs:comment>Available working memory capacity (Normal, Reduced, Severely Reduced)</rdfs:comment>
+        <rdfs:label>working memory capacity</rdfs:label>
+    </owl:DatatypeProperty>
+
+    <!-- Learner Data Properties -->
+
+    <owl:DatatypeProperty rdf:about="http://www.semanticweb.org/ed001/ontology#learnerID">
+        <rdfs:domain rdf:resource="http://www.semanticweb.org/ed001/ontology#Learner"/>
+        <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+        <rdfs:comment>Unique identifier for learner</rdfs:comment>
+        <rdfs:label>learner ID</rdfs:label>
+    </owl:DatatypeProperty>
+
+    <owl:DatatypeProperty rdf:about="http://www.semanticweb.org/ed001/ontology#priorPerformance">
+        <rdfs:domain rdf:resource="http://www.semanticweb.org/ed001/ontology#Learner"/>
+        <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#float"/>
+        <rdfs:comment>Prior task performance score (0.0 to 1.0)</rdfs:comment>
+        <rdfs:label>prior performance</rdfs:label>
+    </owl:DatatypeProperty>
+
+    <!-- Behavioral Signal Data Properties (ML Integration) -->
+
+    <owl:DatatypeProperty rdf:about="http://www.semanticweb.org/ed001/ontology#responseSpeed">
+        <rdfs:domain rdf:resource="http://www.semanticweb.org/ed001/ontology#Learner"/>
+        <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#float"/>
+        <rdfs:comment>Average response time in seconds</rdfs:comment>
+        <rdfs:label>response speed</rdfs:label>
+        <mlIntegration>Behavioral signal input to ML emotion classifier</mlIntegration>
+    </owl:DatatypeProperty>
+
+    <owl:DatatypeProperty rdf:about="http://www.semanticweb.org/ed001/ontology#errorRate">
+        <rdfs:domain rdf:resource="http://www.semanticweb.org/ed001/ontology#Learner"/>
+        <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#float"/>
+        <rdfs:comment>Proportion of errors in recent attempts (0.0 to 1.0)</rdfs:comment>
+        <rdfs:label>error rate</rdfs:label>
+        <mlIntegration>Behavioral signal input to ML emotion classifier</mlIntegration>
+    </owl:DatatypeProperty>
+
+    <owl:DatatypeProperty rdf:about="http://www.semanticweb.org/ed001/ontology#questionSwitchingFrequency">
+        <rdfs:domain rdf:resource="http://www.semanticweb.org/ed001/ontology#Learner"/>
+        <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#integer"/>
+        <rdfs:comment>Number of question switches per minute</rdfs:comment>
+        <rdfs:label>question switching frequency</rdfs:label>
+        <mlIntegration>Behavioral signal indicating cognitive state</mlIntegration>
+    </owl:DatatypeProperty>
+
+    <!-- Outcome Data Properties -->
+
+    <owl:DatatypeProperty rdf:about="http://www.semanticweb.org/ed001/ontology#outcomeScore">
+        <rdfs:domain rdf:resource="http://www.semanticweb.org/ed001/ontology#LearningOutcome"/>
+        <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#float"/>
+        <rdfs:comment>Quantitative outcome score (0.0 to 1.0)</rdfs:comment>
+        <rdfs:label>outcome score</rdfs:label>
+    </owl:DatatypeProperty>
+
+    <owl:DatatypeProperty rdf:about="http://www.semanticweb.org/ed001/ontology#timestamp">
+        <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#dateTime"/>
+        <rdfs:comment>Timestamp of event or state</rdfs:comment>
+        <rdfs:label>timestamp</rdfs:label>
+    </owl:DatatypeProperty>
+
+
+    <!-- 
+    ///////////////////////////////////////////////////////////////////////////////////////
+    //
+    // Classes
+    //
+    ///////////////////////////////////////////////////////////////////////////////////////
+     -->
+
+    <!-- ============================================
+         LAYER 1: LEARNING CONTEXT
+         ============================================ -->
+
+    <owl:Class rdf:about="http://www.semanticweb.org/ed001/ontology#LearningContext">
+        <rdfs:comment>The situational parameters of a learning task, including difficulty, time pressure, feedback availability, and stakes. Aligned to IEEE LOM and BFO:Process.</rdfs:comment>
+        <rdfs:label>Learning Context</rdfs:label>
+        <theoreticalGrounding>Control-Value Theory: Context shapes appraisals of control and value</theoreticalGrounding>
+        <alignedToBFO rdf:resource="http://purl.obolibrary.org/obo/BFO_0000015"/>
+    </owl:Class>
+
+    <owl:Class rdf:about="http://www.semanticweb.org/ed001/ontology#LearningTask">
+        <rdfs:comment>A specific learning activity or problem that a learner attempts</rdfs:comment>
+        <rdfs:label>Learning Task</rdfs:label>
+        <alignedToDOLCE rdf:resource="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#Task"/>
+    </owl:Class>
+
+    <owl:Class rdf:about="http://www.semanticweb.org/ed001/ontology#ExaminationContext">
+        <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/ed001/ontology#LearningContext"/>
+        <rdfs:comment>High-stakes, time-limited testing situation</rdfs:comment>
+        <rdfs:label>Examination Context</rdfs:label>
+    </owl:Class>
+
+    <owl:Class rdf:about="http://www.semanticweb.org/ed001/ontology#PracticeSituation">
+        <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/ed001/ontology#LearningContext"/>
+        <rdfs:comment>Low-stakes practice or formative assessment</rdfs:comment>
+        <rdfs:label>Practice Situation</rdfs:label>
+    </owl:Class>
+
+    <owl:Class rdf:about="http://www.semanticweb.org/ed001/ontology#SimulationEnvironment">
+        <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/ed001/ontology#LearningContext"/>
+        <rdfs:comment>Virtual or physical simulation with controlled variables</rdfs:comment>
+        <rdfs:label>Simulation Environment</rdfs:label>
+    </owl:Class>
+
+
+    <!-- ============================================
+         LAYER 2: EMOTIONAL STATE
+         ============================================ -->
+
+    <owl:Class rdf:about="http://www.semanticweb.org/ed001/ontology#EmotionalState">
+        <rdfs:comment>A discrete emotional state experienced by a learner during task performance. Aligned to MFOEM emotion taxonomy and EFO emotion frames.</rdfs:comment>
+        <rdfs:label>Emotional State</rdfs:label>
+        <theoreticalGrounding>Control-Value Theory achievement emotions taxonomy</theoreticalGrounding>
+        <mlIntegration>Populated by ML emotion classifier from behavioral signals</mlIntegration>
+    </owl:Class>
+
+    <!-- Negative Activating Emotions -->
+
+    <owl:Class rdf:about="http://www.semanticweb.org/ed001/ontology#AnxietyState">
+        <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/ed001/ontology#EmotionalState"/>
+        <rdfs:comment>State of apprehension and worry about task failure. Negative valence, activating, outcome-focused.</rdfs:comment>
+        <rdfs:label>Anxiety State</rdfs:label>
+        <valence>Negative</valence>
+        <activation>Activating</activation>
+        <objectFocus>Outcome</objectFocus>
+    </owl:Class>
+
+    <owl:Class rdf:about="http://www.semanticweb.org/ed001/ontology#FrustrationState">
+        <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/ed001/ontology#EmotionalState"/>
+        <rdfs:comment>State of irritation and tension due to blocked goal progress. Negative valence, activating, activity-focused.</rdfs:comment>
+        <rdfs:label>Frustration State</rdfs:label>
+        <valence>Negative</valence>
+        <activation>Activating</activation>
+        <objectFocus>Activity</objectFocus>
+    </owl:Class>
+
+    <!-- Negative Deactivating Emotions -->
+
+    <owl:Class rdf:about="http://www.semanticweb.org/ed001/ontology#BoredomState">
+        <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/ed001/ontology#EmotionalState"/>
+        <rdfs:comment>State of disengagement and lack of interest. Negative valence, deactivating, activity-focused.</rdfs:comment>
+        <rdfs:label>Boredom State</rdfs:label>
+        <valence>Negative</valence>
+        <activation>Deactivating</activation>
+        <objectFocus>Activity</objectFocus>
+    </owl:Class>
+
+    <owl:Class rdf:about="http://www.semanticweb.org/ed001/ontology#HopelessnessState">
+        <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/ed001/ontology#EmotionalState"/>
+        <rdfs:comment>State of perceived inability to improve. Negative valence, deactivating, outcome-focused.</rdfs:comment>
+        <rdfs:label>Hopelessness State</rdfs:label>
+        <valence>Negative</valence>
+        <activation>Deactivating</activation>
+        <objectFocus>Outcome</objectFocus>
+    </owl:Class>
+
+    <!-- Positive Activating Emotions -->
+
+    <owl:Class rdf:about="http://www.semanticweb.org/ed001/ontology#CuriosityState">
+        <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/ed001/ontology#EmotionalState"/>
+        <rdfs:comment>State of interest and desire to explore. Positive valence, activating, activity-focused.</rdfs:comment>
+        <rdfs:label>Curiosity State</rdfs:label>
+        <valence>Positive</valence>
+        <activation>Activating</activation>
+        <objectFocus>Activity</objectFocus>
+    </owl:Class>
+
+    <owl:Class rdf:about="http://www.semanticweb.org/ed001/ontology#EnjoymentState">
+        <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/ed001/ontology#EmotionalState"/>
+        <rdfs:comment>State of pleasure in the learning activity. Positive valence, activating, activity-focused.</rdfs:comment>
+        <rdfs:label>Enjoyment State</rdfs:label>
+        <valence>Positive</valence>
+        <activation>Activating</activation>
+        <objectFocus>Activity</objectFocus>
+    </owl:Class>
+
+    <!-- Positive Deactivating Emotions -->
+
+    <owl:Class rdf:about="http://www.semanticweb.org/ed001/ontology#ConfidenceState">
+        <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/ed001/ontology#EmotionalState"/>
+        <rdfs:comment>State of self-assurance and belief in capability. Positive valence, deactivating, outcome-focused.</rdfs:comment>
+        <rdfs:label>Confidence State</rdfs:label>
+        <valence>Positive</valence>
+        <activation>Deactivating</activation>
+        <objectFocus>Outcome</objectFocus>
+    </owl:Class>
+
+    <owl:Class rdf:about="http://www.semanticweb.org/ed001/ontology#ReliefState">
+        <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/ed001/ontology#EmotionalState"/>
+        <rdfs:comment>State of release from previous tension. Positive valence, deactivating, outcome-focused.</rdfs:comment>
+        <rdfs:label>Relief State</rdfs:label>
+        <valence>Positive</valence>
+        <activation>Deactivating</activation>
+        <objectFocus>Outcome</objectFocus>
+    </owl:Class>
+
+
+    <!-- ============================================
+         LAYER 3: COGNITIVE STATE
+         ============================================ -->
+
+    <owl:Class rdf:about="http://www.semanticweb.org/ed001/ontology#CognitiveState">
+        <rdfs:comment>The state of cognitive processes during task performance, including working memory, attention, and cognitive load. Aligned to Cognitive Atlas cognitive constructs.</rdfs:comment>
+        <rdfs:label>Cognitive State</rdfs:label>
+        <theoreticalGrounding>Cognitive Load Theory and Cognitive Atlas framework</theoreticalGrounding>
+    </owl:Class>
+
+    <owl:Class rdf:about="http://www.semanticweb.org/ed001/ontology#HighCognitiveLoad">
+        <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/ed001/ontology#CognitiveState"/>
+        <rdfs:comment>State of cognitive overload where working memory is saturated</rdfs:comment>
+        <rdfs:label>High Cognitive Load</rdfs:label>
+        <cognitiveLoadLevel>High</cognitiveLoadLevel>
+    </owl:Class>
+
+    <owl:Class rdf:about="http://www.semanticweb.org/ed001/ontology#ModerateCognitiveLoad">
+        <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/ed001/ontology#CognitiveState"/>
+        <rdfs:comment>State of manageable cognitive demand</rdfs:comment>
+        <rdfs:label>Moderate Cognitive Load</rdfs:label>
+        <cognitiveLoadLevel>Medium</cognitiveLoadLevel>
+    </owl:Class>
+
+    <owl:Class rdf:about="http://www.semanticweb.org/ed001/ontology#LowCognitiveLoad">
+        <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/ed001/ontology#CognitiveState"/>
+        <rdfs:comment>State of low cognitive demand with available capacity</rdfs:comment>
+        <rdfs:label>Low Cognitive Load</rdfs:label>
+        <cognitiveLoadLevel>Low</cognitiveLoadLevel>
+    </owl:Class>
+
+    <owl:Class rdf:about="http://www.semanticweb.org/ed001/ontology#FocusedAttention">
+        <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/ed001/ontology#CognitiveState"/>
+        <rdfs:comment>State of sustained, goal-directed attention</rdfs:comment>
+        <rdfs:label>Focused Attention</rdfs:label>
+        <attentionLevel>Focused</attentionLevel>
+    </owl:Class>
+
+    <owl:Class rdf:about="http://www.semanticweb.org/ed001/ontology#NarrowedAttention">
+        <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/ed001/ontology#CognitiveState"/>
+        <rdfs:comment>State of anxiety-driven tunnel vision, missing broader context</rdfs:comment>
+        <rdfs:label>Narrowed Attention</rdfs:label>
+        <attentionLevel>Narrowed</attentionLevel>
+    </owl:Class>
+
+    <owl:Class rdf:about="http://www.semanticweb.org/ed001/ontology#DistractedState">
+        <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/ed001/ontology#CognitiveState"/>
+        <rdfs:comment>State of divided or wandering attention</rdfs:comment>
+        <rdfs:label>Distracted State</rdfs:label>
+        <attentionLevel>Distributed</attentionLevel>
+    </owl:Class>
+
+
+    <!-- ============================================
+         LAYER 4: DECISION STRATEGY
+         ============================================ -->
+
+    <owl:Class rdf:about="http://www.semanticweb.org/ed001/ontology#DecisionStrategy">
+        <rdfs:comment>The decision-making approach employed by a learner under the influence of their cognitive state. Aligned to DOLCE Action theory.</rdfs:comment>
+        <rdfs:label>Decision Strategy</rdfs:label>
+        <theoreticalGrounding>Dual Process Theory: System 1 (heuristic) vs System 2 (deliberative) reasoning</theoreticalGrounding>
+        <alignedToDOLCE rdf:resource="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#Action"/>
+    </owl:Class>
+
+    <owl:Class rdf:about="http://www.semanticweb.org/ed001/ontology#ImpulsiveDecision">
+        <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/ed001/ontology#DecisionStrategy"/>
+        <rdfs:comment>Quick, unreflective decision driven by cognitive load or anxiety. High error risk.</rdfs:comment>
+        <rdfs:label>Impulsive Decision</rdfs:label>
+    </owl:Class>
+
+    <owl:Class rdf:about="http://www.semanticweb.org/ed001/ontology#ExploratoryReasoning">
+        <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/ed001/ontology#DecisionStrategy"/>
+        <rdfs:comment>Deliberate, curiosity-driven exploration of solution space. Optimal for learning.</rdfs:comment>
+        <rdfs:label>Exploratory Reasoning</rdfs:label>
+    </owl:Class>
+
+    <owl:Class rdf:about="http://www.semanticweb.org/ed001/ontology#AvoidanceStrategy">
+        <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/ed001/ontology#DecisionStrategy"/>
+        <rdfs:comment>Skipping or minimally engaging with challenging tasks. High dropout risk.</rdfs:comment>
+        <rdfs:label>Avoidance Strategy</rdfs:label>
+    </owl:Class>
+
+    <owl:Class rdf:about="http://www.semanticweb.org/ed001/ontology#PersistenceStrategy">
+        <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/ed001/ontology#DecisionStrategy"/>
+        <rdfs:comment>Continued effort despite difficulty or frustration</rdfs:comment>
+        <rdfs:label>Persistence Strategy</rdfs:label>
+    </owl:Class>
+
+    <owl:Class rdf:about="http://www.semanticweb.org/ed001/ontology#HelpSeekingStrategy">
+        <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/ed001/ontology#DecisionStrategy"/>
+        <rdfs:comment>Active request for external support or scaffolding</rdfs:comment>
+        <rdfs:label>Help-Seeking Strategy</rdfs:label>
+    </owl:Class>
+
+
+    <!-- ============================================
+         LAYER 5: LEARNING OUTCOME
+         ============================================ -->
+
+    <owl:Class rdf:about="http://www.semanticweb.org/ed001/ontology#LearningOutcome">
+        <rdfs:comment>The result of a learning attempt, linked to decision strategy and emotional-cognitive chain. Aligned to BFO:Quality.</rdfs:comment>
+        <rdfs:label>Learning Outcome</rdfs:label>
+        <alignedToBFO rdf:resource="http://purl.obolibrary.org/obo/BFO_0000019"/>
+    </owl:Class>
+
+    <owl:Class rdf:about="http://www.semanticweb.org/ed001/ontology#LearningGain">
+        <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/ed001/ontology#LearningOutcome"/>
+        <rdfs:comment>Positive outcome indicating knowledge or skill acquisition</rdfs:comment>
+        <rdfs:label>Learning Gain</rdfs:label>
+    </owl:Class>
+
+    <owl:Class rdf:about="http://www.semanticweb.org/ed001/ontology#ErrorOutcome">
+        <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/ed001/ontology#LearningOutcome"/>
+        <rdfs:comment>Incorrect response or failed task attempt</rdfs:comment>
+        <rdfs:label>Error Outcome</rdfs:label>
+    </owl:Class>
+
+    <owl:Class rdf:about="http://www.semanticweb.org/ed001/ontology#DropoutEvent">
+        <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/ed001/ontology#LearningOutcome"/>
+        <rdfs:comment>Abandonment of task or learning session</rdfs:comment>
+        <rdfs:label>Dropout Event</rdfs:label>
+    </owl:Class>
+
+    <owl:Class rdf:about="http://www.semanticweb.org/ed001/ontology#MasteryAchievement">
+        <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/ed001/ontology#LearningOutcome"/>
+        <rdfs:comment>Demonstration of skill mastery or deep understanding</rdfs:comment>
+        <rdfs:label>Mastery Achievement</rdfs:label>
+    </owl:Class>
+
+
+    <!-- ============================================
+         SUPPORTING CLASSES
+         ============================================ -->
+
+    <owl:Class rdf:about="http://www.semanticweb.org/ed001/ontology#Learner">
+        <rdfs:comment>An individual engaged in a learning task</rdfs:comment>
+        <rdfs:label>Learner</rdfs:label>
+        <alignedToDOLCE rdf:resource="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#Agent"/>
+    </owl:Class>
+
+    <owl:Class rdf:about="http://www.semanticweb.org/ed001/ontology#AdaptiveRecommendation">
+        <rdfs:comment>Personalized recommendation generated by reasoning system based on learner state</rdfs:comment>
+        <rdfs:label>Adaptive Recommendation</rdfs:label>
+    </owl:Class>
+
+    <owl:Class rdf:about="http://www.semanticweb.org/ed001/ontology#StressReduction">
+        <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/ed001/ontology#AdaptiveRecommendation"/>
+        <rdfs:comment>Recommendation to reduce anxiety and cognitive load (e.g., break task into chunks, remove time pressure)</rdfs:comment>
+        <rdfs:label>Stress Reduction Recommendation</rdfs:label>
+    </owl:Class>
+
+    <owl:Class rdf:about="http://www.semanticweb.org/ed001/ontology#EngagementBoost">
+        <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/ed001/ontology#AdaptiveRecommendation"/>
+        <rdfs:comment>Recommendation to counter boredom (e.g., increase challenge, add gamification)</rdfs:comment>
+        <rdfs:label>Engagement Boost Recommendation</rdfs:label>
+    </owl:Class>
+
+    <owl:Class rdf:about="http://www.semanticweb.org/ed001/ontology#ScaffoldingSupport">
+        <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/ed001/ontology#AdaptiveRecommendation"/>
+        <rdfs:comment>Recommendation to provide guided assistance (e.g., worked examples, hints)</rdfs:comment>
+        <rdfs:label>Scaffolding Support Recommendation</rdfs:label>
+    </owl:Class>
+
+    <owl:Class rdf:about="http://www.semanticweb.org/ed001/ontology#RiskLevel">
+        <rdfs:comment>Assessment of decision risk level</rdfs:comment>
+        <rdfs:label>Risk Level</rdfs:label>
+    </owl:Class>
+
+    <owl:Class rdf:about="http://www.semanticweb.org/ed001/ontology#HighRisk">
+        <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/ed001/ontology#RiskLevel"/>
+        <rdfs:comment>High probability of error or dropout</rdfs:comment>
+        <rdfs:label>High Risk</rdfs:label>
+    </owl:Class>
+
+    <owl:Class rdf:about="http://www.semanticweb.org/ed001/ontology#LowRisk">
+        <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/ed001/ontology#RiskLevel"/>
+        <rdfs:comment>Low probability of error, optimal learning state</rdfs:comment>
+        <rdfs:label>Low Risk</rdfs:label>
+    </owl:Class>
+
+    <owl:Class rdf:about="http://www.semanticweb.org/ed001/ontology#ModerateRisk">
+        <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/ed001/ontology#RiskLevel"/>
+        <rdfs:comment>Manageable risk level requiring monitoring</rdfs:comment>
+        <rdfs:label>Moderate Risk</rdfs:label>
+    </owl:Class>
+
+
+    <!-- 
+    ///////////////////////////////////////////////////////////////////////////////////////
+    //
+    // SWRL Rules (Defined as annotations for compatibility)
+    //
+    ///////////////////////////////////////////////////////////////////////////////////////
+     -->
+
+    <!-- Rule 1: Stress Detection -->
+    <swrl:Imp>
+        <swrl:head>
+            <swrl:AtomList>
+                <rdf:first>
+                    <swrl:IndividualPropertyAtom>
+                        <swrl:propertyPredicate rdf:resource="http://www.semanticweb.org/ed001/ontology#hasCognitiveState"/>
+                        <swrl:argument1 rdf:resource="urn:swrl:var#s"/>
+                        <swrl:argument2 rdf:resource="http://www.semanticweb.org/ed001/ontology#HighCognitiveLoad"/>
+                    </swrl:IndividualPropertyAtom>
+                </rdf:first>
+                <rdf:rest rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#nil"/>
+            </swrl:AtomList>
+        </swrl:head>
+        <swrl:body>
+            <swrl:AtomList>
+                <rdf:first>
+                    <swrl:IndividualPropertyAtom>
+                        <swrl:propertyPredicate rdf:resource="http://www.semanticweb.org/ed001/ontology#hasEmotion"/>
+                        <swrl:argument1 rdf:resource="urn:swrl:var#s"/>
+                        <swrl:argument2 rdf:resource="http://www.semanticweb.org/ed001/ontology#AnxietyState"/>
+                    </swrl:IndividualPropertyAtom>
+                </rdf:first>
+                <rdf:rest>
+                    <swrl:AtomList>
+                        <rdf:first>
+                            <swrl:IndividualPropertyAtom>
+                                <swrl:propertyPredicate rdf:resource="http://www.semanticweb.org/ed001/ontology#isAttempting"/>
+                                <swrl:argument1 rdf:resource="urn:swrl:var#s"/>
+                                <swrl:argument2 rdf:resource="urn:swrl:var#t"/>
+                            </swrl:IndividualPropertyAtom>
+                        </rdf:first>
+                        <rdf:rest>
+                            <swrl:AtomList>
+                                <rdf:first>
+                                    <swrl:IndividualPropertyAtom>
+                                        <swrl:propertyPredicate rdf:resource="http://www.semanticweb.org/ed001/ontology#hasContext"/>
+                                        <swrl:argument1 rdf:resource="urn:swrl:var#t"/>
+                                        <swrl:argument2 rdf:resource="urn:swrl:var#ctx"/>
+                                    </swrl:IndividualPropertyAtom>
+                                </rdf:first>
+                                <rdf:rest>
+                                    <swrl:AtomList>
+                                        <rdf:first>
+                                            <swrl:DatavaluedPropertyAtom>
+                                                <swrl:propertyPredicate rdf:resource="http://www.semanticweb.org/ed001/ontology#taskDifficulty"/>
+                                                <swrl:argument1 rdf:resource="urn:swrl:var#ctx"/>
+                                                <swrl:argument2 rdf:datatype="http://www.w3.org/2001/XMLSchema#string">High</swrl:argument2>
+                                            </swrl:DatavaluedPropertyAtom>
+                                        </rdf:first>
+                                        <rdf:rest>
+                                            <swrl:AtomList>
+                                                <rdf:first>
+                                                    <swrl:DatavaluedPropertyAtom>
+                                                        <swrl:propertyPredicate rdf:resource="http://www.semanticweb.org/ed001/ontology#timePressure"/>
+                                                        <swrl:argument1 rdf:resource="urn:swrl:var#ctx"/>
+                                                        <swrl:argument2 rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">true</swrl:argument2>
+                                                    </swrl:DatavaluedPropertyAtom>
+                                                </rdf:first>
+                                                <rdf:rest rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#nil"/>
+                                            </swrl:AtomList>
+                                        </rdf:rest>
+                                    </swrl:AtomList>
+                                </rdf:rest>
+                            </swrl:AtomList>
+                        </rdf:rest>
+                    </swrl:AtomList>
+                </rdf:rest>
+            </swrl:AtomList>
+        </swrl:body>
+        <rdfs:comment>Rule 1 - Stress Detection: IF learner has anxiety AND task has high difficulty AND time pressure is true THEN infer high cognitive load</rdfs:comment>
+        <rdfs:label>SWRL Rule 1: Stress Detection</rdfs:label>
+    </swrl:Imp>
+
+    <!-- Rule 2: Decision Risk Inference -->
+    <swrl:Imp>
+        <swrl:head>
+            <swrl:AtomList>
+                <rdf:first>
+                    <swrl:IndividualPropertyAtom>
+                        <swrl:propertyPredicate rdf:resource="http://www.semanticweb.org/ed001/ontology#hasDecisionStrategy"/>
+                        <swrl:argument1 rdf:resource="urn:swrl:var#s"/>
+                        <swrl:argument2 rdf:resource="http://www.semanticweb.org/ed001/ontology#ImpulsiveDecision"/>
+                    </swrl:IndividualPropertyAtom>
+                </rdf:first>
+                <rdf:rest>
+                    <swrl:AtomList>
+                        <rdf:first>
+                            <swrl:IndividualPropertyAtom>
+                                <swrl:propertyPredicate rdf:resource="http://www.semanticweb.org/ed001/ontology#hasRisk"/>
+                                <swrl:argument1 rdf:resource="urn:swrl:var#s"/>
+                                <swrl:argument2 rdf:resource="http://www.semanticweb.org/ed001/ontology#HighRisk"/>
+                            </swrl:IndividualPropertyAtom>
+                        </rdf:first>
+                        <rdf:rest rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#nil"/>
+                    </swrl:AtomList>
+                </rdf:rest>
+            </swrl:AtomList>
+        </swrl:head>
+        <swrl:body>
+            <swrl:AtomList>
+                <rdf:first>
+                    <swrl:IndividualPropertyAtom>
+                        <swrl:propertyPredicate rdf:resource="http://www.semanticweb.org/ed001/ontology#hasCognitiveState"/>
+                        <swrl:argument1 rdf:resource="urn:swrl:var#s"/>
+                        <swrl:argument2 rdf:resource="http://www.semanticweb.org/ed001/ontology#HighCognitiveLoad"/>
+                    </swrl:IndividualPropertyAtom>
+                </rdf:first>
+                <rdf:rest rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#nil"/>
+            </swrl:AtomList>
+        </swrl:body>
+        <rdfs:comment>Rule 2 - Decision Risk: IF learner has high cognitive load THEN infer impulsive decision strategy AND high risk level</rdfs:comment>
+        <rdfs:label>SWRL Rule 2: High Load to Impulsive Decision</rdfs:label>
+    </swrl:Imp>
+
+    <!-- Rule 3: Positive Flow State -->
+    <swrl:Imp>
+        <swrl:head>
+            <swrl:AtomList>
+                <rdf:first>
+                    <swrl:IndividualPropertyAtom>
+                        <swrl:propertyPredicate rdf:resource="http://www.semanticweb.org/ed001/ontology#hasDecisionStrategy"/>
+                        <swrl:argument1 rdf:resource="urn:swrl:var#s"/>
+                        <swrl:argument2 rdf:resource="http://www.semanticweb.org/ed001/ontology#ExploratoryReasoning"/>
+                    </swrl:IndividualPropertyAtom>
+                </rdf:first>
+                <rdf:rest>
+                    <swrl:AtomList>
+                        <rdf:first>
+                            <swrl:IndividualPropertyAtom>
+                                <swrl:propertyPredicate rdf:resource="http://www.semanticweb.org/ed001/ontology#hasRisk"/>
+                                <swrl:argument1 rdf:resource="urn:swrl:var#s"/>
+                                <swrl:argument2 rdf:resource="http://www.semanticweb.org/ed001/ontology#LowRisk"/>
+                            </swrl:IndividualPropertyAtom>
+                        </rdf:first>
+                        <rdf:rest rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#nil"/>
+                    </swrl:AtomList>
+                </rdf:rest>
+            </swrl:AtomList>
+        </swrl:head>
+        <swrl:body>
+            <swrl:AtomList>
+                <rdf:first>
+                    <swrl:IndividualPropertyAtom>
+                        <swrl:propertyPredicate rdf:resource="http://www.semanticweb.org/ed001/ontology#hasEmotion"/>
+                        <swrl:argument1 rdf:resource="urn:swrl:var#s"/>
+                        <swrl:argument2 rdf:resource="http://www.semanticweb.org/ed001/ontology#CuriosityState"/>
+                    </swrl:IndividualPropertyAtom>
+                </rdf:first>
+                <rdf:rest>
+                    <swrl:AtomList>
+                        <rdf:first>
+                            <swrl:IndividualPropertyAtom>
+                                <swrl:propertyPredicate rdf:resource="http://www.semanticweb.org/ed001/ontology#hasCognitiveState"/>
+                                <swrl:argument1 rdf:resource="urn:swrl:var#s"/>
+                                <swrl:argument2 rdf:resource="http://www.semanticweb.org/ed001/ontology#FocusedAttention"/>
+                            </swrl:IndividualPropertyAtom>
+                        </rdf:first>
+                        <rdf:rest rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#nil"/>
+                    </swrl:AtomList>
+                </rdf:rest>
+            </swrl:AtomList>
+        </swrl:body>
+        <rdfs:comment>Rule 3 - Positive Flow: IF learner has curiosity AND focused attention THEN infer exploratory reasoning strategy AND low risk</rdfs:comment>
+        <rdfs:label>SWRL Rule 3: Curiosity Flow State</rdfs:label>
+    </swrl:Imp>
+
+    <!-- Rule 4: Anxiety Recommendation -->
+    <swrl:Imp>
+        <swrl:head>
+            <swrl:AtomList>
+                <rdf:first>
+                    <swrl:IndividualPropertyAtom>
+                        <swrl:propertyPredicate rdf:resource="http://www.semanticweb.org/ed001/ontology#receivesRecommendation"/>
+                        <swrl:argument1 rdf:resource="urn:swrl:var#s"/>
+                        <swrl:argument2 rdf:resource="http://www.semanticweb.org/ed001/ontology#StressReduction"/>
+                    </swrl:IndividualPropertyAtom>
+                </rdf:first>
+                <rdf:rest rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#nil"/>
+            </swrl:AtomList>
+        </swrl:head>
+        <swrl:body>
+            <swrl:AtomList>
+                <rdf:first>
+                    <swrl:IndividualPropertyAtom>
+                        <swrl:propertyPredicate rdf:resource="http://www.semanticweb.org/ed001/ontology#hasEmotion"/>
+                        <swrl:argument1 rdf:resource="urn:swrl:var#s"/>
+                        <swrl:argument2 rdf:resource="http://www.semanticweb.org/ed001/ontology#AnxietyState"/>
+                    </swrl:IndividualPropertyAtom>
+                </rdf:first>
+                <rdf:rest>
+                    <swrl:AtomList>
+                        <rdf:first>
+                            <swrl:IndividualPropertyAtom>
+                                <swrl:propertyPredicate rdf:resource="http://www.semanticweb.org/ed001/ontology#hasRisk"/>
+                                <swrl:argument1 rdf:resource="urn:swrl:var#s"/>
+                                <swrl:argument2 rdf:resource="http://www.semanticweb.org/ed001/ontology#HighRisk"/>
+                            </swrl:IndividualPropertyAtom>
+                        </rdf:first>
+                        <rdf:rest rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#nil"/>
+                    </swrl:AtomList>
+                </rdf:rest>
+            </swrl:AtomList>
+        </swrl:body>
+        <rdfs:comment>Rule 4 - Anxiety Intervention: IF learner has anxiety AND high risk THEN recommend stress reduction intervention</rdfs:comment>
+        <rdfs:label>SWRL Rule 4: Stress Reduction Recommendation</rdfs:label>
+    </swrl:Imp>
+
+    <!-- Rule 5: Boredom Recommendation -->
+    <swrl:Imp>
+        <swrl:head>
+            <swrl:AtomList>
+                <rdf:first>
+                    <swrl:IndividualPropertyAtom>
+                        <swrl:propertyPredicate rdf:resource="http://www.semanticweb.org/ed001/ontology#receivesRecommendation"/>
+                        <swrl:argument1 rdf:resource="urn:swrl:var#s"/>
+                        <swrl:argument2 rdf:resource="http://www.semanticweb.org/ed001/ontology#EngagementBoost"/>
+                    </swrl:IndividualPropertyAtom>
+                </rdf:first>
+                <rdf:rest rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#nil"/>
+            </swrl:AtomList>
+        </swrl:head>
+        <swrl:body>
+            <swrl:AtomList>
+                <rdf:first>
+                    <swrl:IndividualPropertyAtom>
+                        <swrl:propertyPredicate rdf:resource="http://www.semanticweb.org/ed001/ontology#hasEmotion"/>
+                        <swrl:argument1 rdf:resource="urn:swrl:var#s"/>
+                        <swrl:argument2 rdf:resource="http://www.semanticweb.org/ed001/ontology#BoredomState"/>
+                    </swrl:IndividualPropertyAtom>
+                </rdf:first>
+                <rdf:rest rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#nil"/>
+            </swrl:AtomList>
+        </swrl:body>
+        <rdfs:comment>Rule 5 - Boredom Intervention: IF learner has boredom THEN recommend engagement boost intervention</rdfs:comment>
+        <rdfs:label>SWRL Rule 5: Engagement Boost Recommendation</rdfs:label>
+    </swrl:Imp>
+
+    <!-- Rule 6: Frustration to Avoidance -->
+    <swrl:Imp>
+        <swrl:head>
+            <swrl:AtomList>
+                <rdf:first>
+                    <swrl:IndividualPropertyAtom>
+                        <swrl:propertyPredicate rdf:resource="http://www.semanticweb.org/ed001/ontology#hasDecisionStrategy"/>
+                        <swrl:argument1 rdf:resource="urn:swrl:var#s"/>
+                        <swrl:argument2 rdf:resource="http://www.semanticweb.org/ed001/ontology#AvoidanceStrategy"/>
+                    </swrl:IndividualPropertyAtom>
+                </rdf:first>
+                <rdf:rest>
+                    <swrl:AtomList>
+                        <rdf:first>
+                            <swrl:IndividualPropertyAtom>
+                                <swrl:propertyPredicate rdf:resource="http://www.semanticweb.org/ed001/ontology#hasRisk"/>
+                                <swrl:argument1 rdf:resource="urn:swrl:var#s"/>
+                                <swrl:argument2 rdf:resource="http://www.semanticweb.org/ed001/ontology#HighRisk"/>
+                            </swrl:IndividualPropertyAtom>
+                        </rdf:first>
+                        <rdf:rest rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#nil"/>
+                    </swrl:AtomList>
+                </rdf:rest>
+            </swrl:AtomList>
+        </swrl:head>
+        <swrl:body>
+            <swrl:AtomList>
+                <rdf:first>
+                    <swrl:IndividualPropertyAtom>
+                        <swrl:propertyPredicate rdf:resource="http://www.semanticweb.org/ed001/ontology#hasEmotion"/>
+                        <swrl:argument1 rdf:resource="urn:swrl:var#s"/>
+                        <swrl:argument2 rdf:resource="http://www.semanticweb.org/ed001/ontology#FrustrationState"/>
+                    </swrl:IndividualPropertyAtom>
+                </rdf:first>
+                <rdf:rest>
+                    <swrl:AtomList>
+                        <rdf:first>
+                            <swrl:IndividualPropertyAtom>
+                                <swrl:propertyPredicate rdf:resource="http://www.semanticweb.org/ed001/ontology#hasCognitiveState"/>
+                                <swrl:argument1 rdf:resource="urn:swrl:var#s"/>
+                                <swrl:argument2 rdf:resource="http://www.semanticweb.org/ed001/ontology#DistractedState"/>
+                            </swrl:IndividualPropertyAtom>
+                        </rdf:first>
+                        <rdf:rest rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#nil"/>
+                    </swrl:AtomList>
+                </rdf:rest>
+            </swrl:AtomList>
+        </swrl:body>
+        <rdfs:comment>Rule 6 - Frustration Avoidance: IF learner has frustration AND distracted state THEN infer avoidance strategy AND high dropout risk</rdfs:comment>
+        <rdfs:label>SWRL Rule 6: Frustration to Avoidance</rdfs:label>
+    </swrl:Imp>
+
+</rdf:RDF>
